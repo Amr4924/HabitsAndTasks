@@ -1,109 +1,151 @@
-<!--
-	Professional README for the ToDo app.
-	Replace the screenshot and demo links with actual assets in /assets/screenshots/
--->
+<div align="center">
 
-# ToDoLocalizer (To Do List)
+# HabitsAndTasks
 
-[![Flutter](https://img.shields.io/badge/Framework-Flutter-blue)](https://flutter.dev)
-[![Language-Dart](https://img.shields.io/badge/Language-Dart-0175C2)](https://dart.dev)
-[![License-MIT](https://img.shields.io/badge/License-MIT-lightgrey)](LICENSE)
+**A clean, bilingual to-do list app built with Flutter**
 
-<img src="assets/icons/lang-support.svg" alt="Language Support" width="140" />
+[![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=flat&logo=Flutter&logoColor=white)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-%230175C2.svg?style=flat&logo=dart&logoColor=white)](https://dart.dev)
+[![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS-informational)](#)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#-contributing)
 
-Beautiful, localized To‑Do list app built with Flutter — lightweight, animated, and ready for customization.
+</div>
 
----
+## Overview
 
-## Demo
+**HabitsAndTasks** is a lightweight, well-structured to-do list app built with Flutter. It covers the full loop of a task manager — add, complete, revert, delete — wrapped in a polished Material UI with complete English/Arabic localization and a confirmation dialog in front of every meaningful action. It was built as a hands-on exercise in state management, internationalization, and clean widget architecture.
 
-- Animated splash, smooth list transitions, and Lottie/Rive dialogs (suggested).
+## 📸 Screenshots
 
-![screenshot-1](assets/screenshots/screenshot-1.png "App Home")
+Screenshots aren't included yet. Once added to `assets/screenshots/`, the Home, Add Task, and Completed Tasks screens will be showcased here.
 
-GIF demo (replace with actual GIF in `assets/screenshots/demo.gif`):
+## ✨ Features
 
-![demo](assets/screenshots/demo.gif)
+**Task management**
+- Add a task with a title, description, and a specific due date & time via native date and time pickers
+- Mark a task complete — it moves automatically from the active list into a dedicated Completed Tasks screen
+- Revert a completed task back to active, with a confirmation prompt
+- Delete individual tasks — active or completed — with a confirmation dialog
+- Clear every active task in one action, with a confirmation dialog
+- Live task counters in the app bar for both active and completed tasks
+- Friendly empty-state messaging when a list has nothing to show
 
----
+**Localization & UX**
+- Full English / Arabic localization via `easy_localization`, including translated month names and AM/PM labels
+- Instant in-app language switching from the navigation drawer — no restart required
+- Automatic right-to-left layout when Arabic is active, built on Flutter's native RTL support
+- A confirmation dialog (via `awesome_dialog`) in front of every destructive or state-changing action, so nothing happens by accident
 
-## Key Features
+**Design**
+- Custom Material theme built from a deep-purple color seed, with a coral (`#F08080`) accent across app bars and primary actions
+- Card-based list layout with clear visual separation between active and completed tasks
 
-- Add / delete tasks with animated dialogs
-- Mark tasks complete and view completed tasks
-- Localization (English / Arabic) via `easy_localization`
-- Provider for state management
-- Animated UI hooks ready for `rive` or `lottie`
+## 🛠️ Tech Stack
 
----
+| Category | Package | Version |
+|---|---|---|
+| Framework | Flutter / Dart | Dart SDK `>=3.9.1 <4.0.0` |
+| State management | [`provider`](https://pub.dev/packages/provider) | `^6.1.5+1` |
+| Localization | [`easy_localization`](https://pub.dev/packages/easy_localization) | `^3.0.8` |
+| Dialogs & alerts | [`awesome_dialog`](https://pub.dev/packages/awesome_dialog) | `^3.3.0` |
+| Icons | `cupertino_icons` | `^1.0.8` |
+| Linting | `flutter_lints` | `^6.0.0` |
+| Platforms | Android, iOS | — |
 
-## Design & Animation Notes
+## 📂 Project Structure
 
-- Use a Rive or Lottie animated splash (add .riv / .json to `assets/animations`).
-- Use `ImplicitlyAnimatedList` or `AnimatedList` for insert/delete animations.
-- Replace `AwesomeDialog` content with a Lottie animation for success/warning screens.
+```
+HabitsAndTasks/
+├── lib/
+│   ├── main.dart                 # App entry point — EasyLocalization & Provider setup
+│   ├── Home.dart                 # Home screen: active task list, app bar actions
+│   ├── add_task.dart             # Floating action button + "Add Task" dialog & date/time pickers
+│   ├── drawer.dart                # Navigation drawer (language switcher)
+│   ├── complete_age/
+│   │   └── complete.dart          # Completed tasks screen
+│   └── logic/
+│       ├── data.dart               # ToDoList model
+│       ├── To do list.dart         # LogicToDoList — app state & business logic (ChangeNotifier)
+│       └── change-language.dart    # Locale toggle helper
+├── assets/
+│   ├── icons/                     # UI icon assets
+│   └── translations/
+│       ├── en-US.json
+│       └── ar-EG.json
+├── test/
+│   └── widget_test.dart
+└── pubspec.yaml
+```
 
-Recommended libraries
+## 🚀 Getting Started
 
-- `rive` (for interactive vector animations)
-- `lottie` / `lottie_flutter`
-- `flutter_launcher_icons` (for app icons)
-- `flutter_animate` or `animations`
+### Prerequisites
+- [Flutter SDK](https://docs.flutter.dev/get-started/install) installed and on your `PATH`
+- Android Studio / Xcode for platform builds, or any editor with the Flutter/Dart extensions
+- A connected device, emulator, or simulator
 
----
-
-## Quick Start
-
-1. Install dependencies
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/Amr4924/HabitsAndTasks.git
+cd HabitsAndTasks
+
+# Install dependencies
 flutter pub get
-```
 
-2. Generate launcher icons (optional)
-
-```bash
-flutter pub run flutter_launcher_icons:main
-```
-
-3. Run the app
-
-```bash
+# Run the app
 flutter run
 ```
 
+## 🌍 Localization
+
+<img src="assets/icons/lang-support.svg" alt="English / Arabic language support" width="120" />
+
+The app ships with complete English and Arabic translations:
+
+```
+assets/translations/
+├── en-US.json
+└── ar-EG.json
+```
+
+Switch languages at runtime from **Drawer → Options → Change Language** — it takes effect immediately, no restart required. Arabic automatically renders right-to-left, since Flutter derives text direction from the active locale.
+
+To add another language:
+1. Add the new locale to `supportedLocales` in `lib/main.dart`
+2. Create a matching JSON file in `assets/translations/` (e.g. `fr-FR.json`) using the same keys as `en-US.json`
+
+## 🗺️ Roadmap
+
+The app currently keeps all data in memory for the running session only. Natural next steps:
+
+- [ ] **Persistent storage** — tasks reset on app restart today; add local persistence (e.g. `shared_preferences` or `Hive`)
+- [ ] **Reminders** — each task already captures a due date & time; wire it up to `flutter_local_notifications` to put it to use
+- [ ] **Automated tests** — `test/widget_test.dart` is still the default Flutter counter test; replace it with real widget/unit tests
+- [ ] **Custom app icon & splash screen** — currently using the default Flutter launcher icon
+- [ ] **Recurring / habit-style tasks** — repeat schedules and streaks, to grow the app into its name
+
+## 🤝 Contributing
+
+Contributions, issues, and suggestions are welcome:
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit your changes with clear, focused messages
+4. Run `flutter analyze` and `flutter test` before opening a PR
+5. Open a pull request describing the change
+
+## 📄 License
+
+No license file is included yet. If this project is meant to be reused or distributed, consider adding one — [MIT](https://choosealicense.com/licenses/mit/) is a common, permissive choice for portfolio projects.
+
+## 👤 Author
+
+Built by [**Amr**](https://github.com/Amr4924), as part of an ongoing, hands-on journey into Flutter development.
+
 ---
 
-## Project Structure (high level)
-
-- `lib/` — app source
-  - `main.dart` — app entry and localization setup
-  - `Home.dart` — main UI
-  - `add_task.dart`, `dialog.dart`, `complete/` — features
-- `assets/translations/` — JSON translation files
-- `assets/animations/` — Rive / Lottie files (add your own)
-
----
-
-## Screenshots / Assets
-
-Add the following files to `assets/screenshots/` and commit:
-
-- `screenshot-1.png` — home screen
-- `demo.gif` — short demo GIF (250–600px width recommended)
-
-For animations put `.riv` or `.json` into `assets/animations/` and list them in `pubspec.yaml`.
-
----
-
-## Contributing
-
-- Fork → branch → PR. Add small, focused commits.
-- Run `flutter analyze` and `flutter test` before PR.
-
----
-
-If you want, I can:
-
-- generate a polished `assets/screenshots/demo.gif` placeholder (using repo screenshots), or
-- add a Rive splash and wire it into `main.dart` now. Which do you prefer?
+<div align="center">
+<sub>Built with Flutter</sub>
+</div>
