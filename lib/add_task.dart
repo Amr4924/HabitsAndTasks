@@ -101,7 +101,7 @@ class _AddTaskState extends State<AddTask> {
                   onPressed: () async {
                     String title = titleController.text;
                     String description = descriptionController.text;
-                    if (title.trim().isEmpty || description.trim().isEmpty) {
+                    if (title.trim().isEmpty) {
                       return;
                     }
 
@@ -111,7 +111,6 @@ class _AddTaskState extends State<AddTask> {
                     if (selectedDateTime == null) {
                       return;
                     }
-
                     Navigator.pop(dialogContext);
                     context.read<LogicToDoList>().add(
                       ToDoList(

@@ -1,24 +1,17 @@
-// ignore_for_file: file_names
-
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:to_do_list/add_task.dart';
-import 'package:to_do_list/complete_age/complete.dart';
-import 'package:to_do_list/drawer.dart';
 import 'package:to_do_list/logic/To%20do%20list.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 
-// Home screen that shows active tasks and provides actions to manage them.
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class TrashPage extends StatefulWidget {
+  const TrashPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<TrashPage> createState() => _TrashPageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  // Formats the task date into a readable localized string.
+class _TrashPageState extends State<TrashPage> {
   String _formatTaskTime(DateTime dateTime) {
     final List<String> months = <String>[
       tr('month-Jan'),
@@ -44,17 +37,17 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 237, 230, 230),
-      drawer: DrawerPage(),
-      // Top app bar shows the title, task count, navigation to completed tasks, and clear-all action.
       appBar: AppBar(
         backgroundColor: Color(0xffF08080),
         title: Text(
-          tr('title-home'),
+          tr('btn-trash'),
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
+        centerTitle: true,
+
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
           Padding(
@@ -76,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    '${context.watch<LogicToDoList>().countTasks()}',
+                    '${context.watch<LogicToDoList>().countTrash()}',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 15,
@@ -89,17 +82,7 @@ class _HomePageState extends State<HomePage> {
           ),
           IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CompletePage()),
-              );
-            },
-            tooltip: tr('txt-Completed-Tasks'),
-            icon: Icon(Icons.task_alt_outlined),
-          ),
-          IconButton(
-            onPressed: () {
-              if (context.read<LogicToDoList>().listTasks.isEmpty) {
+              if (context.read<LogicToDoList>().listTrash.isEmpty) {
                 AwesomeDialog(
                   context: context,
                   animType: AnimType.leftSlide,
@@ -109,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                     backgroundColor: Colors.red,
                     child: Icon(Icons.close, color: Colors.white, size: 44),
                   ),
-                  title: tr('txt-There-are-no-tasks-to-delete.'),
+                  title: tr('txt-There-are-no-tasks-in-Trash-delete.'),
                   btnOkOnPress: () {},
                   btnOkText: tr('btn-done'),
                   btnOkColor: Colors.red,
@@ -144,13 +127,13 @@ class _HomePageState extends State<HomePage> {
                       btnOkOnPress: () {},
                       btnOkText: tr('btn-done'),
                     ).show();
-                    context.read<LogicToDoList>().clearAllTasks();
+                    context.read<LogicToDoList>().clearTrash();
                   },
                   btnCancelOnPress: () {},
                 ).show();
               }
             },
-            tooltip: tr('txt-delete-all'),
+            tooltip: tr("txt-delete-all"),
             icon: Icon(Icons.delete_sweep_outlined),
           ),
         ],
@@ -158,10 +141,10 @@ class _HomePageState extends State<HomePage> {
 
       body: Consumer<LogicToDoList>(
         builder: (context, value, child) {
-          if (value.listTasks.isEmpty) {
+          if (value.listTrash.isEmpty) {
             return Center(
               child: Text(
-                tr('no-task'),
+                tr('txt-no-trash'),
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -171,7 +154,7 @@ class _HomePageState extends State<HomePage> {
             );
           }
           return ListView.builder(
-            itemCount: value.countTasks(),
+            itemCount: value.countTrash(),
             itemBuilder: (context, i) {
               // Each card represents one task and exposes complete/delete actions.
               return Padding(
@@ -187,19 +170,19 @@ class _HomePageState extends State<HomePage> {
                         size: 18,
                       ),
                     ),
-                    title: Text(value.listTasks[i].name),
+                    title: Text(value.listTrash[i].name),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          value.listTasks[i].description,
+                          value.listTrash[i].description,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          _formatTaskTime(value.listTasks[i].selectTime),
+                          _formatTaskTime(value.listTrash[i].selectTime),
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             color: Colors.black54,
@@ -207,35 +190,43 @@ class _HomePageState extends State<HomePage> {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
+                        const SizedBox(height: 4),
+                        Text(
+                          "${tr('txt-state')}: ${value.listTrash[i].state ? tr("txt-comlete") : tr("txt-incomlete")}",
+                        ),
                       ],
                     ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Checkbox(
-                          side: BorderSide(color: Color(0xffF08080)),
-                          value: value.listTasks[i].state,
-                          onChanged: (valueChanged) {
+                        IconButton(
+                          onPressed: () {
                             AwesomeDialog(
                               context: context,
-                              animType: AnimType.scale,
-                              dialogType: DialogType.success,
-                              customHeader: CircleAvatar(
+                              animType: AnimType.leftSlide,
+                              dialogType: DialogType.warning,
+                              customHeader: const CircleAvatar(
                                 radius: 40,
-                                backgroundColor: Colors.green,
+                                backgroundColor: Color(0xffF08080),
                                 child: Icon(
-                                  Icons.done,
+                                  Icons.warning_amber_rounded,
                                   color: Colors.white,
                                   size: 44,
                                 ),
                               ),
-                              title: tr('Successful-mg'),
+                              title: tr('Warning'),
+                              desc: tr('btn-delete-forever-dialog'),
                               btnOkOnPress: () {
-                                value.changeState(value.listTasks[i]);
+                                value.finalDeletion(value.listTrash[i]);
                               },
-                              btnOkText: tr('btn-done'),
+                              btnCancelOnPress: () {},
                             ).show();
                           },
+                          tooltip: tr('btn-delete-forever'),
+                          icon: Icon(
+                            Icons.delete_forever_outlined,
+                            color: Colors.red,
+                          ),
                         ),
                         IconButton(
                           onPressed: () {
@@ -253,16 +244,17 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               title: tr('Warning'),
-                              desc: tr('delete-warning'),
+                              desc: tr('btn-restore-dialog'),
                               btnOkOnPress: () {
-                                value.deleteTask(value.listTasks[i]);
+                                value.revertDeletion(value.listTrash[i]);
                               },
                               btnCancelOnPress: () {},
                             ).show();
                           },
+                          tooltip: tr('btn-restore'),
                           icon: Icon(
-                            Icons.delete_forever,
-                            color: Color.fromARGB(255, 255, 0, 0),
+                            Icons.restore_from_trash_outlined,
+                            color: Colors.green,
                           ),
                         ),
                       ],
@@ -274,8 +266,6 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
-
-      floatingActionButton: AddTask(),
     );
   }
 }
