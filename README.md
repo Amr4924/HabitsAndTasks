@@ -13,22 +13,26 @@
 
 ## Overview
 
-**HabitsAndTasks** is a lightweight, well-structured to-do list app built with Flutter. It covers the full loop of a task manager — add, complete, revert, delete — wrapped in a polished Material UI with complete English/Arabic localization and a confirmation dialog in front of every meaningful action. It was built as a hands-on exercise in state management, internationalization, and clean widget architecture.
+**HabitsAndTasks** is a lightweight, well-structured to-do list app built with Flutter. It covers the full loop of a task manager — add, complete, revert, delete with recovery via a built-in Trash — wrapped in a polished Material UI with complete English/Arabic localization and a confirmation dialog in front of every meaningful action. It was built as a hands-on exercise in state management, internationalization, and clean widget architecture.
 
 ## 📸 Screenshots
 
-Screenshots aren't included yet. Once added to `assets/screenshots/`, the Home, Add Task, and Completed Tasks screens will be showcased here.
+Screenshots aren't included yet. Once added to `assets/screenshots/`, the Home, Add Task, Completed Tasks, and Trash screens will be showcased here.
 
 ## ✨ Features
 
 **Task management**
-- Add a task with a title, description, and a specific due date & time via native date and time pickers
+- Add a task with a title and a specific due date & time via native date and time pickers — description is optional
 - Mark a task complete — it moves automatically from the active list into a dedicated Completed Tasks screen
 - Revert a completed task back to active, with a confirmation prompt
-- Delete individual tasks — active or completed — with a confirmation dialog
-- Clear every active task in one action, with a confirmation dialog
-- Live task counters in the app bar for both active and completed tasks
-- Friendly empty-state messaging when a list has nothing to show
+- Live task counters in the app bar for active, completed, and trashed tasks
+- Friendly empty-state messaging whenever a list has nothing to show
+
+**Trash & recovery**
+- Deleting a task — individually or via "Clear All" — moves it to a dedicated Trash instead of erasing it
+- Restore any trashed task back to where it came from (active or completed)
+- Permanently delete a single trashed item, or empty the whole Trash at once
+- Bulk actions ("Clear All", "Empty Trash") check first and show a plain "nothing to delete" message instead of a pointless confirmation when the list is already empty
 
 **Localization & UX**
 - Full English / Arabic localization via `easy_localization`, including translated month names and AM/PM labels
@@ -37,8 +41,10 @@ Screenshots aren't included yet. Once added to `assets/screenshots/`, the Home, 
 - A confirmation dialog (via `awesome_dialog`) in front of every destructive or state-changing action, so nothing happens by accident
 
 **Design**
+- Animated splash screen on launch, with a progress bar and percentage counter in the app's accent color
+- Redesigned navigation drawer with a branded header and a dedicated Trash entry
 - Custom Material theme built from a deep-purple color seed, with a coral (`#F08080`) accent across app bars and primary actions
-- Card-based list layout with clear visual separation between active and completed tasks
+- Card-based list layout with clear visual separation between active, completed, and trashed tasks
 
 ## 🛠️ Tech Stack
 
@@ -57,12 +63,15 @@ Screenshots aren't included yet. Once added to `assets/screenshots/`, the Home, 
 ```
 HabitsAndTasks/
 ├── lib/
-│   ├── main.dart                 # App entry point — EasyLocalization & Provider setup
-│   ├── Home.dart                 # Home screen: active task list, app bar actions
-│   ├── add_task.dart             # Floating action button + "Add Task" dialog & date/time pickers
-│   ├── drawer.dart                # Navigation drawer (language switcher)
+│   ├── main.dart                   # App entry point — EasyLocalization & Provider setup
+│   ├── Home.dart                   # Home screen: active task list, app bar actions
+│   ├── add_task.dart               # Floating action button + "Add Task" dialog & date/time pickers
+│   ├── drawer.dart                 # Navigation drawer (language switch + Trash entry)
+│   ├── trash.dart                  # Trash screen — restore or permanently delete removed tasks
 │   ├── complete_age/
-│   │   └── complete.dart          # Completed tasks screen
+│   │   └── complete.dart           # Completed tasks screen
+│   ├── loding/
+│   │   └── loding_page.dart        # Animated splash screen shown on launch
 │   └── logic/
 │       ├── data.dart               # ToDoList model
 │       ├── To do list.dart         # LogicToDoList — app state & business logic (ChangeNotifier)
@@ -123,7 +132,7 @@ The app currently keeps all data in memory for the running session only. Natural
 - [ ] **Persistent storage** — tasks reset on app restart today; add local persistence (e.g. `shared_preferences` or `Hive`)
 - [ ] **Reminders** — each task already captures a due date & time; wire it up to `flutter_local_notifications` to put it to use
 - [ ] **Automated tests** — `test/widget_test.dart` is still the default Flutter counter test; replace it with real widget/unit tests
-- [ ] **Custom app icon & splash screen** — currently using the default Flutter launcher icon
+- [ ] **Custom app icon** — currently using the default Flutter launcher icon (the app now has an animated splash screen)
 - [ ] **Recurring / habit-style tasks** — repeat schedules and streaks, to grow the app into its name
 
 ## 🤝 Contributing
